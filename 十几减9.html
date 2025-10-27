@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>破十法计算教学 - 十几减9</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑", sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            padding: 10px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .panel h2 {
+            color: #4a90e2;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f0f0f0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .number-panel {
+            flex: 0 0 auto;
+        }
+        
+        .visual-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .steps-panel {
+            flex: 0 0 auto;
+        }
+        
+        .number-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+        
+        .number-btn {
+            background-color: #7b68ee;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .number-btn:hover {
+            background-color: #6a5acd;
+            transform: translateY(-2px);
+        }
+        
+        .number-btn.active {
+            background-color: #4a90e2;
+            transform: scale(1.05);
+        }
+        
+        .visual-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .equation {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #4a90e2;
+            font-weight: bold;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .counters-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 8px 0;
+            flex: 1;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .counter-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .counter-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-right: 12px;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .counters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            transition: all 0.5s;
+        }
+        
+        .counter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+            transition: all 0.5s;
+        }
+        
+        .tens {
+            background-color: #ff6b6b;
+            border: 2px solid #ff5252;
+        }
+        
+        .ones {
+            background-color: #4a90e2;
+            border: 2px solid #357abd;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .step {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            background-color: #e3f2fd;
+            border-left: 4px solid #4a90e2;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            background-color: #4a90e2;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+        
+        .control-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .primary-btn {
+            background-color: #4a90e2;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background-color: #7b68ee;
+            color: white;
+        }
+        
+        .outline-btn {
+            background-color: transparent;
+            border: 2px solid #4a90e2;
+            color: #4a90e2;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .practice-area {
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .practice-area h2 {
+            color: #4a90e2;
+            margin-bottom: 12px;
+            text-align: center;
+            width: 100%;
+            font-size: 1.2rem;
+        }
+        
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #4a90e2;
+        }
+        
+        .answer-input {
+            font-size: 1.2rem;
+            padding: 6px;
+            width: 70px;
+            text-align: center;
+            border: 2px solid #4a90e2;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .feedback {
+            font-size: 1rem;
+            margin-top: 8px;
+            min-height: 20px;
+            text-align: center;
+        }
+        
+        .correct {
+            color: #28a745;
+        }
+        
+        .incorrect {
+            color: #dc3545;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: scale(0.5); }
+        }
+        
+        @keyframes moveDown {
+            from { transform: translateY(0); }
+            to { transform: translateY(50px); }
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        .move-down {
+            animation: moveDown 0.8s forwards;
+        }
+        
+        .result {
+            color: #28a745;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>破十法计算教学</h1>
+        <p class="subtitle">轻松学会十几减9的计算方法</p>
+    </header>
+    
+    <div class="main-container">
+        <div class="panel number-panel">
+            <h2>数字选择</h2>
+            <div class="number-buttons" id="numberButtons">
+                <!-- 数字按钮将通过JavaScript生成 -->
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn primary-btn" id="resetBtn">重置</button>
+                <button class="control-btn secondary-btn" id="randomBtn">随机出题</button>
+            </div>
+        </div>
+        
+        <div class="panel visual-panel">
+            <h2>计算演示</h2>
+            <div class="visual-area">
+                <div class="equation" id="equation">
+                    请选择一个数字开始
+                </div>
+                <div class="counters-container" id="countersContainer">
+                    <!-- 计数器将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn primary-btn" id="prevStep">上一步</button>
+                <button class="control-btn primary-btn" id="nextStep">下一步</button>
+            </div>
+        </div>
+        
+        <div class="panel steps-panel">
+            <h2>步骤说明</h2>
+            <div class="steps">
+                <div class="step" id="step1">
+                    <span class="step-number">1</span>
+                    <strong>拆分数字：</strong> 把十几拆分成10和几
+                </div>
+                <div class="step" id="step2">
+                    <span class="step-number">2</span>
+                    <strong>减9计算：</strong> 用10减去9等于1
+                </div>
+                <div class="step" id="step3">
+                    <span class="step-number">3</span>
+                    <strong>相加得结果：</strong> 把1和几相加得到最终答案
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="practice-area">
+        <h2>练习区</h2>
+        <div class="question" id="practiceQuestion">请点击"随机出题"开始练习</div>
+        <input type="number" class="answer-input" id="answerInput" placeholder="答案">
+        <button class="control-btn outline-btn" id="checkAnswer">检查答案</button>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentNumber = 0;
+        let currentStep = 0;
+        let animationInProgress = false;
+        
+        // DOM元素
+        const numberButtons = document.getElementById('numberButtons');
+        const countersContainer = document.getElementById('countersContainer');
+        const equation = document.getElementById('equation');
+        const prevStepBtn = document.getElementById('prevStep');
+        const nextStepBtn = document.getElementById('nextStep');
+        const resetBtn = document.getElementById('resetBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        const practiceQuestion = document.getElementById('practiceQuestion');
+        const answerInput = document.getElementById('answerInput');
+        const checkAnswerBtn = document.getElementById('checkAnswer');
+        const feedback = document.getElementById('feedback');
+        
+        // 初始化
+        function init() {
+            // 生成数字按钮
+            for (let i = 11; i <= 19; i++) {
+                const button = document.createElement('button');
+                button.className = 'number-btn';
+                button.textContent = i;
+                button.dataset.number = i;
+                button.addEventListener('click', () => selectNumber(i));
+                numberButtons.appendChild(button);
+            }
+            
+            // 添加事件监听器
+            prevStepBtn.addEventListener('click', prevStep);
+            nextStepBtn.addEventListener('click', nextStep);
+            resetBtn.addEventListener('click', reset);
+            randomBtn.addEventListener('click', randomQuestion);
+            checkAnswerBtn.addEventListener('click', checkAnswer);
+            
+            // 初始状态
+            reset();
+        }
+        
+        // 选择数字
+        function selectNumber(number) {
+            if (animationInProgress) return;
+            
+            currentNumber = number;
+            currentStep = 0;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.number) === number) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 重置步骤
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // 显示第一步
+            showStep(1);
+        }
+        
+        // 显示步骤
+        function showStep(step) {
+            if (animationInProgress) return;
+            
+            currentStep = step;
+            
+            // 更新步骤高亮
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                if (index + 1 <= step) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.remove('active');
+                }
+            });
+            
+            // 更新计算区域
+            updateVisualization();
+        }
+        
+        // 更新可视化区域
+        function updateVisualization() {
+            // 清空计数器
+            countersContainer.innerHTML = '';
+            equation.innerHTML = '';
+            
+            if (currentStep === 0 || currentNumber === 0) {
+                equation.textContent = '请选择一个数字开始';
+                return;
+            }
+            
+            const ones = currentNumber - 10;
+            
+            if (currentStep === 1) {
+                // 第一步：显示拆分
+                const tensGroup = document.createElement('div');
+                tensGroup.className = 'counter-group';
+                
+                const tensLabel = document.createElement('div');
+                tensLabel.className = 'counter-label';
+                tensLabel.textContent = '10';
+                tensGroup.appendChild(tensLabel);
+                
+                const tensCounters = document.createElement('div');
+                tensCounters.className = 'counters';
+                for (let i = 0; i < 10; i++) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter tens';
+                    counter.textContent = '1';
+                    tensCounters.appendChild(counter);
+                }
+                tensGroup.appendChild(tensCounters);
+                
+                const onesGroup = document.createElement('div');
+                onesGroup.className = 'counter-group';
+                
+                const onesLabel = document.createElement('div');
+                onesLabel.className = 'counter-label';
+                onesLabel.textContent = ones;
+                onesGroup.appendChild(onesLabel);
+                
+                const onesCounters = document.createElement('div');
+                onesCounters.className = 'counters';
+                for (let i = 0; i < ones; i++) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter ones';
+                    counter.textContent = '1';
+                    onesCounters.appendChild(counter);
+                }
+                onesGroup.appendChild(onesCounters);
+                
+                countersContainer.appendChild(tensGroup);
+                countersContainer.appendChild(onesGroup);
+                
+                equation.textContent = `${currentNumber} = 10 + ${ones}`;
+            }
+            else if (currentStep === 2) {
+                // 第二步：显示减法过程
+                const tensGroup = document.createElement('div');
+                tensGroup.className = 'counter-group';
+                
+                const tensLabel = document.createElement('div');
+                tensLabel.className = 'counter-label';
+                tensLabel.textContent = '10';
+                tensLabel.id = 'tensLabel';
+                tensGroup.appendChild(tensLabel);
+                
+                const tensCounters = document.createElement('div');
+                tensCounters.className = 'counters';
+                tensCounters.id = 'tensCounters';
+                for (let i = 0; i < 10; i++) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter tens';
+                    counter.textContent = '1';
+                    counter.id = `tensCounter${i}`;
+                    tensCounters.appendChild(counter);
+                }
+                tensGroup.appendChild(tensCounters);
+                
+                const onesGroup = document.createElement('div');
+                onesGroup.className = 'counter-group';
+                
+                const onesLabel = document.createElement('div');
+                onesLabel.className = 'counter-label';
+                onesLabel.textContent = ones;
+                onesGroup.appendChild(onesLabel);
+                
+                const onesCounters = document.createElement('div');
+                onesCounters.className = 'counters';
+                for (let i = 0; i < ones; i++) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter ones';
+                    counter.textContent = '1';
+                    onesCounters.appendChild(counter);
+                }
+                onesGroup.appendChild(onesCounters);
+                
+                countersContainer.appendChild(tensGroup);
+                countersContainer.appendChild(onesGroup);
+                
+                equation.textContent = `${currentNumber} - 9 = `;
+                
+                // 开始减法动画
+                setTimeout(() => {
+                    animateSubtraction();
+                }, 500);
+            }
+            else if (currentStep === 3) {
+                // 第三步：显示加法过程
+                const tensGroup = document.createElement('div');
+                tensGroup.className = 'counter-group';
+                
+                const tensLabel = document.createElement('div');
+                tensLabel.className = 'counter-label';
+                tensLabel.textContent = '1';
+                tensGroup.appendChild(tensLabel);
+                
+                const tensCounters = document.createElement('div');
+                tensCounters.className = 'counters';
+                const remainingCounter = document.createElement('div');
+                remainingCounter.className = 'counter tens';
+                remainingCounter.textContent = '1';
+                remainingCounter.id = 'remainingCounter';
+                tensCounters.appendChild(remainingCounter);
+                tensGroup.appendChild(tensCounters);
+                
+                const onesGroup = document.createElement('div');
+                onesGroup.className = 'counter-group';
+                
+                const onesLabel = document.createElement('div');
+                onesLabel.className = 'counter-label';
+                onesLabel.textContent = ones;
+                onesGroup.appendChild(onesLabel);
+                
+                const onesCounters = document.createElement('div');
+                onesCounters.className = 'counters';
+                onesCounters.id = 'onesCounters';
+                for (let i = 0; i < ones; i++) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter ones';
+                    counter.textContent = '1';
+                    onesCounters.appendChild(counter);
+                }
+                onesGroup.appendChild(onesCounters);
+                
+                countersContainer.appendChild(tensGroup);
+                countersContainer.appendChild(onesGroup);
+                
+                equation.textContent = `${currentNumber} - 9 = 1 + ${ones} = `;
+                
+                // 开始加法动画
+                setTimeout(() => {
+                    animateAddition();
+                }, 500);
+            }
+        }
+        
+        // 减法动画
+        function animateSubtraction() {
+            animationInProgress = true;
+            const tensLabel = document.getElementById('tensLabel');
+            const tensCounters = document.getElementById('tensCounters');
+            
+            // 更新算式
+            equation.textContent = `${currentNumber} - 9 = `;
+            
+            // 逐个移除红色圆球
+            let removedCount = 0;
+            const removeInterval = setInterval(() => {
+                if (removedCount < 9) {
+                    const counter = document.getElementById(`tensCounter${removedCount}`);
+                    counter.classList.add('fade-out');
+                    removedCount++;
+                    
+                    // 更新标签显示剩余数量
+                    tensLabel.textContent = `10 - ${removedCount}`;
+                } else {
+                    clearInterval(removeInterval);
+                    
+                    // 显示最终结果
+                    setTimeout(() => {
+                        tensLabel.textContent = '1';
+                        
+                        animationInProgress = false;
+                    }, 500);
+                }
+            }, 600);
+        }
+        
+        // 加法动画
+        function animateAddition() {
+            animationInProgress = true;
+            const remainingCounter = document.getElementById('remainingCounter');
+            const onesCounters = document.getElementById('onesCounters');
+            
+            // 移动红色圆球到蓝色圆球后面
+            setTimeout(() => {
+                remainingCounter.classList.add('move-down');
+                
+                setTimeout(() => {
+                    // 移动完成后，将红色圆球添加到蓝色圆球容器中
+                    onesCounters.appendChild(remainingCounter);
+                    remainingCounter.classList.remove('move-down');
+                    
+                    // 显示最终结果
+                    const resultSpan = document.createElement('span');
+                    resultSpan.className = 'result';
+                    resultSpan.textContent = `${1 + (currentNumber - 10)}`;
+                    equation.appendChild(resultSpan);
+                    
+                    animationInProgress = false;
+                }, 800);
+            }, 500);
+        }
+        
+        // 上一步
+        function prevStep() {
+            if (animationInProgress) return;
+            
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+        
+        // 下一步
+        function nextStep() {
+            if (animationInProgress) return;
+            
+            if (currentStep < 3) {
+                showStep(currentStep + 1);
+            }
+        }
+        
+        // 重置
+        function reset() {
+            currentNumber = 0;
+            currentStep = 0;
+            
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            updateVisualization();
+            feedback.textContent = '';
+            answerInput.value = '';
+        }
+        
+        // 随机出题
+        function randomQuestion() {
+            const randomNum = Math.floor(Math.random() * 9) + 11; // 11-19
+            selectNumber(randomNum);
+            
+            // 更新练习区
+            practiceQuestion.textContent = `${randomNum} - 9 = ?`;
+            feedback.textContent = '';
+            answerInput.value = '';
+            answerInput.focus();
+        }
+        
+        // 检查答案
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+            const correctAnswer = currentNumber - 9;
+            
+            if (isNaN(userAnswer)) {
+                feedback.textContent = '请输入一个数字';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = '✓ 回答正确！';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `✗ 回答错误，正确答案是 ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        // 初始化应用
+        window.onload = init;
+    </script>
+</body>
+</html>
